@@ -4,6 +4,10 @@
  */
 package edu.ijse.crs;
 
+import edu.ijse.DAO.UserDAO;
+import edu.ijse.model.User;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ASUS
@@ -31,12 +35,12 @@ public class UserLogin extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        L_userId = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jPasswordField1 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,7 +60,7 @@ public class UserLogin extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel2.setText("Enter Your Username *");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 300, 160, 30));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 350, 270, 50));
+        jPanel1.add(L_userId, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 350, 270, 50));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/user.png"))); // NOI18N
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 350, -1, 50));
@@ -64,7 +68,6 @@ public class UserLogin extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel6.setText("Enter Your Password *");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 420, 180, 20));
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 460, 270, 50));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/password-76-48.png"))); // NOI18N
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 460, 50, 50));
@@ -73,7 +76,13 @@ public class UserLogin extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Rockwell Condensed", 1, 24)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Sign In");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 540, 170, 40));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 540, 160, 40));
+        jPanel1.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 460, 270, 50));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -91,6 +100,36 @@ public class UserLogin extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    //Sign In button
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+         String userId = L_userId.getText();
+    String password = new String(jPasswordField1.getPassword());
+
+    UserDAO userDao  = new UserDAO();
+    User loggeduser = userDao.login(userId, password);
+
+    if (loggeduser != null) {
+        switch (loggeduser.getRole()) {
+            case "Admin":
+                new AdminDashboard(loggeduser).setVisible(true);
+                break;
+            case "Student":
+                new StudentDashboard(loggeduser).setVisible(true);
+                break;
+            case "Faculty":
+                new FacultyDashboard(loggeduser).setVisible(true);
+                break;
+            default:
+                JOptionPane.showMessageDialog(this, "Unknown role: " + loggeduser.getRole());
+        }
+        this.dispose();
+    } else {
+        JOptionPane.showMessageDialog(this, "Invalid user ID or password!");
+    }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -129,6 +168,7 @@ public class UserLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField L_userId;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -138,7 +178,6 @@ public class UserLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JPasswordField jPasswordField1;
     // End of variables declaration//GEN-END:variables
 }
