@@ -4,6 +4,7 @@ package edu.ijse.model;
 
 public class StudentDetails {
      private String userId;
+     private String FacultyName;
      private String name;
      private String DateOfBirth;
      private String Programme;
@@ -14,8 +15,9 @@ public class StudentDetails {
      
      public StudentDetails() {}
 
-    public StudentDetails(String userId, String name, String DateOfBirth, String Programme, String AcademicYear, String Contact,String Password) {
+    public StudentDetails(String userId,String FacultyName ,String name, String DateOfBirth, String Programme, String AcademicYear, String Contact,String Password) {
         this.userId = userId;
+        this.FacultyName = FacultyName;
         this.name = name;
         this.DateOfBirth = DateOfBirth;
         this.Programme = Programme;
@@ -25,6 +27,14 @@ public class StudentDetails {
         this.Password = Password;
     }
 
+    public String getFacultyName() {
+        return FacultyName;
+    }
+
+    public void setFacultyName(String FacultyName) {
+        this.FacultyName = FacultyName;
+    }
+ 
     public String getUserId() {
         return userId;
     }
