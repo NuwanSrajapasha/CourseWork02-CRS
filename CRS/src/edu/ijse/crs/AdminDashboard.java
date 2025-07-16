@@ -240,9 +240,10 @@ public class AdminDashboard extends javax.swing.JFrame {
            sid.setText("");
            nme.setText("");
           
-           sid.setText("");
-           sid.setText("");
-           sid.setText("");
+           pr.setText("");
+           co.setText("");
+           ay.setText("");
+           pw.setText("");
            
        }
     }//GEN-LAST:event_jButton1ActionPerformed
