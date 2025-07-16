@@ -99,8 +99,8 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Grades Management">
-                    <Property name="tabTitle" type="java.lang.String" value="Grades Management"/>
+                  <JTabbedPaneConstraints tabName="Eligibility Management">
+                    <Property name="tabTitle" type="java.lang.String" value="Eligibility Management"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>

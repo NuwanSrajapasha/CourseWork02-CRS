@@ -61,7 +61,7 @@ public class FacultyDashboard extends javax.swing.JFrame {
             .addGap(0, 809, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Grades Management", jPanel3);
+        jTabbedPane1.addTab("Eligibility Management", jPanel3);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 

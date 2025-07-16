@@ -76,6 +76,7 @@ public class StudentDashboard extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTabbedPane1.setBackground(new java.awt.Color(102, 255, 255));
+        jTabbedPane1.setFont(new java.awt.Font("Rockwell Condensed", 1, 18)); // NOI18N
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -231,7 +232,7 @@ public class StudentDashboard extends javax.swing.JFrame {
             .addGap(0, 819, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Results", jPanel3);
+        jTabbedPane1.addTab("Eligibility Status", jPanel3);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
