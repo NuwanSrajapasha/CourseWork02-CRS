@@ -3,18 +3,18 @@ package edu.ijse.model;
 
 public class Courses {
     
-     private String courseId;
+    
      private String courseCode;
      private String courseTitle;
      private String faculty;
      private String prerequisite;
-     private int maxCapacity;
+     private String maxCapacity;
      private String facultyId;
      
      public Courses() {}
 
-    public Courses(String courseId, String courseCode, String courseTitle, String faculty, String prerequisite, int maxCapacity, String facultyId) {
-        this.courseId = courseId;
+    public Courses( String courseCode, String courseTitle, String faculty, String prerequisite, String maxCapacity, String facultyId) {
+       
         this.courseCode = courseCode;
         this.courseTitle = courseTitle;
         this.faculty = faculty;
@@ -23,13 +23,8 @@ public class Courses {
         this.facultyId = facultyId;
     }
 
-    public String getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(String courseId) {
-        this.courseId = courseId;
-    }
+    
+    
 
     public String getCourseCode() {
         return courseCode;
@@ -63,11 +58,11 @@ public class Courses {
         this.prerequisite = prerequisite;
     }
 
-    public int getMaxCapacity() {
+    public String getMaxCapacity() {
         return maxCapacity;
     }
 
-    public void setMaxCapacity(int maxCapacity) {
+    public void setMaxCapacity(String maxCapacity) {
         this.maxCapacity = maxCapacity;
     }
 
