@@ -5,6 +5,7 @@ import edu.ijse.db.DbConnection;
 import edu.ijse.model.StudentDetails;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
@@ -54,5 +55,40 @@ public class StudentDetailsDAO {
         
     }
     
+   public boolean getStudentDetailsById(StudentDetails student) {
+    String sql = "SELECT * FROM studentdetails WHERE user_id = ?";
+   
+
+    try (Connection con = DbConnection.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, student.getUserId().trim());
+       
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                System.out.println("DEBUG: Row FOUND in studentdetails!");
+                
+                student.setName(rs.getString("name"));
+                student.setDateOfBirth(rs.getString("DOB"));
+                student.setProgramme(rs.getString("Program"));
+                student.setAcademicYear(rs.getString("Acedemic_Year"));
+                student.setContact(rs.getString("Contact"));
+
+               
+                return true;
+            } else {
+                System.out.println("DEBUG: No row returned from studentdetails!");
+            }
+        }
+
+    } catch (SQLException e) {
+        System.out.println("DEBUG: SQL Exception -> " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    return false;
+}
+
     
 }

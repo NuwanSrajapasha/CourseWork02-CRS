@@ -104,7 +104,7 @@ public class UserLogin extends javax.swing.JFrame {
     //Sign In button
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-         String userId = L_userId.getText();
+    String userId = L_userId.getText();
     String password = new String(jPasswordField1.getPassword());
 
     UserDAO userDao  = new UserDAO();
