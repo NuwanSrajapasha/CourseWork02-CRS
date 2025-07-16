@@ -6,10 +6,14 @@ import edu.ijse.model.StudentDetails;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 
 
 public class StudentDetailsDAO {
+    
     
    //Student detials registration portal
     
@@ -55,7 +59,7 @@ public class StudentDetailsDAO {
         
     }
     
-   public boolean getStudentDetailsById(StudentDetails student) {
+    public boolean getStudentDetailsById(StudentDetails student) {
     String sql = "SELECT * FROM studentdetails WHERE user_id = ?";
    
 
