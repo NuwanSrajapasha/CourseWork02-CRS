@@ -13,8 +13,7 @@ import java.sql.SQLException;
  * @author ASUS
  */
 public class UserDAO {
-    private Connection con;
-
+    
     //customer registartion portal
     public boolean registerUser(User user) {
         

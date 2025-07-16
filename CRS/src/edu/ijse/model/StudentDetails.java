@@ -14,7 +14,7 @@ public class StudentDetails {
      
      public StudentDetails() {}
 
-    public StudentDetails(String userId, String name, String DateOfBirth, String Programme, String AcademicYear, String Contact, String role, String Password) {
+    public StudentDetails(String userId, String name, String DateOfBirth, String Programme, String AcademicYear, String Contact,String Password) {
         this.userId = userId;
         this.name = name;
         this.DateOfBirth = DateOfBirth;

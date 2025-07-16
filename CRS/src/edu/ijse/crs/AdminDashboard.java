@@ -1,7 +1,11 @@
 
 package edu.ijse.crs;
 
+import edu.ijse.DAO.StudentDetailsDAO;
+import edu.ijse.model.StudentDetails;
 import edu.ijse.model.User;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 
 public class AdminDashboard extends javax.swing.JFrame {
@@ -60,6 +64,9 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         jLabel4.setText("Date Of Birth");
 
+        dte.setDateFormatString("yyyy-MM-dd");
+        dte.setFont(new java.awt.Font("Rockwell Condensed", 1, 14)); // NOI18N
+
         jLabel5.setText("Programme :");
 
         jLabel6.setText("Contact :");
@@ -68,6 +75,11 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Rockwell Condensed", 1, 18)); // NOI18N
         jButton1.setText("SUBMIT");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -209,6 +221,31 @@ public class AdminDashboard extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+     //Student Registration
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String userid = sid.getText();
+        String Sname = nme.getText();
+        String dob = ((JTextField)dte.getDateEditor().getUiComponent()).getText();
+        String program = pr.getText();
+        String contact = co.getText();
+        String academicYr = ay.getText();
+        String password = pw.getText();
+        
+        StudentDetails st = new StudentDetails( userid,Sname,dob,program,academicYr,contact,password);
+        StudentDetailsDAO  stddao = new StudentDetailsDAO();
+        boolean success = stddao.registerStudent(st);
+       if(success){
+           JOptionPane.showMessageDialog(null, "Registration Success");
+           sid.setText("");
+           nme.setText("");
+          
+           sid.setText("");
+           sid.setText("");
+           sid.setText("");
+           
+       }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
    
     public static void main(String args[]) {
