@@ -1071,7 +1071,7 @@ public class FacultyDashboard extends javax.swing.JFrame {
          
         DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
         if (jTable1.getSelectedColumnCount() == 1) {
-           
+           String facultyId = fcsid.getText().trim();
             String Progr = pg1.getText();
             String St = status.getText();
            
@@ -1079,7 +1079,7 @@ public class FacultyDashboard extends javax.swing.JFrame {
             try {
                 Connection con = DbConnection.getConnection();
                 int row = jTable1.getSelectedRow();
-                String value = (jTable1.getModel().getValueAt(row, 0).toString()); //original id
+                
 
                
                 dtm.setValueAt(Progr, jTable1.getSelectedRow(), 0);
@@ -1092,7 +1092,7 @@ public class FacultyDashboard extends javax.swing.JFrame {
                 pt.setString(1, pg1.getText());
                 pt.setString(2, status.getText());
                
-                pt.setString(3, value);
+                pt.setString(3, facultyId);
                 pt.executeUpdate();
 
                 JOptionPane.showMessageDialog(this, "Updated success");

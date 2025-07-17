@@ -370,9 +370,17 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" min="-2" pref="1020" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane1" min="-2" pref="1020" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="525" max="-2" attributes="0"/>
+                                  <Component id="GAR" min="-2" pref="232" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                           <EmptySpace pref="144" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -382,7 +390,9 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="98" max="-2" attributes="0"/>
                           <Component id="jScrollPane1" min="-2" pref="442" max="-2" attributes="0"/>
-                          <EmptySpace pref="279" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                          <Component id="GAR" min="-2" pref="33" max="-2" attributes="0"/>
+                          <EmptySpace pref="197" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -439,6 +449,17 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Component class="javax.swing.JButton" name="GAR">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Rockwell Condensed" size="18" style="1"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Gnerate Acedemic Report"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GARActionPerformed"/>
+                  </Events>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="crtab">
@@ -487,7 +508,7 @@
                                   <Component id="cct" max="32767" attributes="0"/>
                                   <Component id="sfid" pref="195" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                              <Component id="registerbtn" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="92" max="32767" attributes="0"/>
                           <Component id="ctable" min="-2" pref="884" max="-2" attributes="0"/>
@@ -529,7 +550,7 @@
                                       <Component id="sfid" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                                  <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="registerbtn" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace pref="287" max="32767" attributes="0"/>
@@ -654,7 +675,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JButton" name="jButton2">
+                <Component class="javax.swing.JButton" name="registerbtn">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Rockwell Condensed" size="16" style="1"/>
@@ -662,7 +683,7 @@
                     <Property name="text" type="java.lang.String" value="Register For a Course"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registerbtnActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>
@@ -699,7 +720,7 @@
                                   <EmptySpace min="-2" pref="129" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="dropbtn" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="527" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
@@ -723,7 +744,7 @@
                               <Component id="CourseCode" min="-2" pref="32" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                          <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                          <Component id="dropbtn" min="-2" max="-2" attributes="0"/>
                           <EmptySpace pref="175" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -799,7 +820,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="CourseCode">
                 </Component>
-                <Component class="javax.swing.JButton" name="jButton3">
+                <Component class="javax.swing.JButton" name="dropbtn">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Rockwell Condensed" size="18" style="1"/>
@@ -807,7 +828,7 @@
                     <Property name="text" type="java.lang.String" value="DROP "/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dropbtnActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>

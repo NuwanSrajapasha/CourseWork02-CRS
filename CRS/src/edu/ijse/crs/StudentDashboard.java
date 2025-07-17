@@ -1,6 +1,7 @@
 
 package edu.ijse.crs;
 
+import edu.ijse.DAO.AddDropDAO;
 import edu.ijse.DAO.CourseEnrolledDAO;
 import edu.ijse.DAO.CoursesDAO;
 import edu.ijse.DAO.EligibilityDAO;
@@ -12,9 +13,12 @@ import edu.ijse.model.EnrollDetails;
 import edu.ijse.model.StudentDetails;
 import edu.ijse.model.User;
 import java.awt.Component;
+import java.awt.print.PrinterException;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,6 +28,7 @@ public class StudentDashboard extends javax.swing.JFrame {
     private User loggedInUser;
     private String facultyName;
     private String facultyId;
+   
     private String studentId;
     private String stid;
    
@@ -41,7 +46,7 @@ public class StudentDashboard extends javax.swing.JFrame {
         loadCourses();
         loadEligible();
         loadEnroll();
-        
+       
         
         //passing facultyId
          String studentId = loggedInUser.getUserId();
@@ -53,13 +58,32 @@ public class StudentDashboard extends javax.swing.JFrame {
          
          sfid.setText(facultyId);
          sfid.setEnabled(false);
-         
-         
+        
+          checkAddDropPeriod(facultyId);
          
      }
      
     
-        
+   private void checkAddDropPeriod(String facultyId) {
+    
+    if (facultyId.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Faculty ID is missing!");
+    return;
+}
+    
+    AddDropDAO dao = new AddDropDAO();
+    boolean isActive = dao.isAddDropActive(facultyId);
+
+    // Enable or disable buttons based on status
+    registerbtn.setEnabled(isActive);
+    dropbtn.setEnabled(isActive);
+
+    if (!isActive) {
+        System.out.println("Add/Drop period is NOT active for faculty: " + facultyId);
+    } else {
+        System.out.println("Add/Drop period is ACTIVE for faculty: " + facultyId);
+    }
+}
      
      
     
@@ -236,6 +260,7 @@ public class StudentDashboard extends javax.swing.JFrame {
         estatus = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         eligit = new javax.swing.JTable();
+        GAR = new javax.swing.JButton();
         crtab = new javax.swing.JPanel();
         ctable = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -249,14 +274,14 @@ public class StudentDashboard extends javax.swing.JFrame {
         cct = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         sfid = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        registerbtn = new javax.swing.JButton();
         ectab = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         etable = new javax.swing.JTable();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         CourseCode = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        dropbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -442,13 +467,26 @@ public class StudentDashboard extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(eligit);
 
+        GAR.setFont(new java.awt.Font("Rockwell Condensed", 1, 18)); // NOI18N
+        GAR.setText("Gnerate Acedemic Report");
+        GAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GARActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout estatusLayout = new javax.swing.GroupLayout(estatus);
         estatus.setLayout(estatusLayout);
         estatusLayout.setHorizontalGroup(
             estatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(estatusLayout.createSequentialGroup()
-                .addGap(136, 136, 136)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1020, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(estatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(estatusLayout.createSequentialGroup()
+                        .addGap(136, 136, 136)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1020, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(estatusLayout.createSequentialGroup()
+                        .addGap(525, 525, 525)
+                        .addComponent(GAR, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(144, Short.MAX_VALUE))
         );
         estatusLayout.setVerticalGroup(
@@ -456,7 +494,9 @@ public class StudentDashboard extends javax.swing.JFrame {
             .addGroup(estatusLayout.createSequentialGroup()
                 .addGap(98, 98, 98)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(279, Short.MAX_VALUE))
+                .addGap(49, 49, 49)
+                .addComponent(GAR, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(197, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Eligibility Status", estatus);
@@ -513,11 +553,11 @@ public class StudentDashboard extends javax.swing.JFrame {
 
         sfid.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jButton2.setFont(new java.awt.Font("Rockwell Condensed", 1, 16)); // NOI18N
-        jButton2.setText("Register For a Course");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        registerbtn.setFont(new java.awt.Font("Rockwell Condensed", 1, 16)); // NOI18N
+        registerbtn.setText("Register For a Course");
+        registerbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                registerbtnActionPerformed(evt);
             }
         });
 
@@ -548,7 +588,7 @@ public class StudentDashboard extends javax.swing.JFrame {
                         .addComponent(ccd)
                         .addComponent(cct)
                         .addComponent(sfid, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
-                    .addComponent(jButton2))
+                    .addComponent(registerbtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
                 .addComponent(ctable, javax.swing.GroupLayout.PREFERRED_SIZE, 884, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(17, 17, 17))
@@ -582,7 +622,7 @@ public class StudentDashboard extends javax.swing.JFrame {
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(sfid, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(27, 27, 27)
-                        .addComponent(jButton2)))
+                        .addComponent(registerbtn)))
                 .addContainerGap(287, Short.MAX_VALUE))
         );
 
@@ -628,11 +668,11 @@ public class StudentDashboard extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Rockwell Condensed", 1, 18)); // NOI18N
         jLabel16.setText("Course Code :");
 
-        jButton3.setFont(new java.awt.Font("Rockwell Condensed", 1, 18)); // NOI18N
-        jButton3.setText("DROP ");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        dropbtn.setFont(new java.awt.Font("Rockwell Condensed", 1, 18)); // NOI18N
+        dropbtn.setText("DROP ");
+        dropbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                dropbtnActionPerformed(evt);
             }
         });
 
@@ -653,7 +693,7 @@ public class StudentDashboard extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 990, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(129, 129, 129))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ectabLayout.createSequentialGroup()
-                        .addComponent(jButton3)
+                        .addComponent(dropbtn)
                         .addGap(527, 527, 527))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ectabLayout.createSequentialGroup()
                         .addComponent(jLabel15)
@@ -671,7 +711,7 @@ public class StudentDashboard extends javax.swing.JFrame {
                     .addComponent(jLabel16)
                     .addComponent(CourseCode, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
-                .addComponent(jButton3)
+                .addComponent(dropbtn)
                 .addContainerGap(175, Short.MAX_VALUE))
         );
 
@@ -706,7 +746,7 @@ public class StudentDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
   
     //course registration
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void registerbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerbtnActionPerformed
         // TODO add your handling code here:
         
         String studentId=loggedInUser.getUserId();
@@ -738,7 +778,7 @@ public class StudentDashboard extends javax.swing.JFrame {
         loadEnroll();
         
         
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_registerbtnActionPerformed
 
     //mouse clicked for course details
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -751,7 +791,7 @@ public class StudentDashboard extends javax.swing.JFrame {
         cct.setText(title);
     }//GEN-LAST:event_jTable1MouseClicked
 //drop button
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void dropbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dropbtnActionPerformed
         // TODO add your handling code here:
 
         String Coursecd = CourseCode.getText();
@@ -775,7 +815,7 @@ public class StudentDashboard extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "DROP Failed.Please try again");
             }
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_dropbtnActionPerformed
 
     private void jScrollPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane2MouseClicked
         // TODO add your handling code here:
@@ -791,6 +831,28 @@ public class StudentDashboard extends javax.swing.JFrame {
           CourseCode.setText(coid);
         
     }//GEN-LAST:event_etableMouseClicked
+
+    private void GARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GARActionPerformed
+        // TODO add your handling code here:
+         try {
+        // Add a title for your report
+        MessageFormat header = new MessageFormat("My Academic Report : " + loggedInUser.getUserId());
+        // Add a footer with page numbers
+        MessageFormat footer = new MessageFormat("Page {0}");
+
+        // Print the JTable
+        boolean complete = eligit.print(JTable.PrintMode.FIT_WIDTH, header, footer);
+
+        if (complete) {
+            JOptionPane.showMessageDialog(this, "Report generated successfully!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Report generation canceled!");
+        }
+
+    } catch (PrinterException ex) {
+        JOptionPane.showMessageDialog(this, "Error printing: " + ex.getMessage());
+    }
+    }//GEN-LAST:event_GARActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -827,6 +889,7 @@ public class StudentDashboard extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CourseCode;
+    private javax.swing.JButton GAR;
     private javax.swing.JLabel ay;
     private javax.swing.JTextField ccd;
     private javax.swing.JTextField cct;
@@ -834,14 +897,13 @@ public class StudentDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel crtab;
     private javax.swing.JScrollPane ctable;
     private javax.swing.JLabel dob;
+    private javax.swing.JButton dropbtn;
     private javax.swing.JPanel ectab;
     private javax.swing.JTable eligit;
     private javax.swing.JPanel estatus;
     private javax.swing.JTable etable;
     private javax.swing.JLabel fname;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -865,6 +927,7 @@ public class StudentDashboard extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField ppv;
     private javax.swing.JLabel prg;
+    private javax.swing.JButton registerbtn;
     private javax.swing.JTextField sfid;
     private javax.swing.JTextField sid;
     private javax.swing.JLabel snme;

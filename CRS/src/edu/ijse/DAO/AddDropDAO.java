@@ -76,4 +76,31 @@ public class AddDropDAO {
     return AddDropList;
 }
     
+     
+     //add drop checking and availability of buttons
+     
+  public boolean isAddDropActive(String facultyId) {
+    String sql = "SELECT status FROM add_drop_period WHERE faculty_id = ?";
+    try (Connection con = DbConnection.getConnection();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, facultyId.trim());
+        System.out.println("DEBUG: Running query for faculty_id=" + facultyId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                String status = rs.getString("status");
+                System.out.println("DEBUG: Found status = " + status);
+
+                return "ACTIVE".equalsIgnoreCase(status); 
+            } else {
+                System.out.println("DEBUG: No row found for this faculty!");
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false; // default
+}
+     
 }
