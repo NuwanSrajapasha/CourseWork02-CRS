@@ -80,31 +80,31 @@ public class CoursesDAO {
     return courseList;
 }
      
-     public boolean getCoursesById(Courses course1) {
-    String sql = "SELECT * FROM courses WHERE faculty_id = ?";
+      //Get courses by faculty id
+     public List<Courses> getCoursesByName(String facultyname) {
+         List<Courses> courseList = new ArrayList<>();
+         String sql = "SELECT * FROM courses WHERE faculty= ?";
    
 
     try (Connection con = DbConnection.getConnection();
          PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setString(1, course1.getFacultyId().trim());
+        ps.setString(1, facultyname);
        
 
         try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
+           while (rs.next()) {
                
-                
+               Courses course1 = new Courses();
                course1.setCourseCode(rs.getString("course_code"));
                course1.setCourseTitle(rs.getString("c_title"));
                //course1.setFaculty(rs.getString("faculty"));
                course1.setPrerequisite(rs.getString("prerequisites"));
                course1.setMaxCapacity(rs.getString("max_capacity"));
 
-               
-                return true;
-            } else {
-                System.out.println("DEBUG: No row returned from Courses!");
-            }
+               courseList.add(course1);
+                
+            } 
         }
 
     } catch (SQLException e) {
@@ -112,7 +112,43 @@ public class CoursesDAO {
         e.printStackTrace();
     }
 
-    return false;
+    return courseList;
 }
+     
+     
+//     public boolean getCoursesById(Courses course1) {
+//    String sql = "SELECT * FROM courses WHERE faculty_id = ?";
+//   
+//
+//    try (Connection con = DbConnection.getConnection();
+//         PreparedStatement ps = con.prepareStatement(sql)) {
+//
+//        ps.setString(1, course1.getFacultyId().trim());
+//       
+//
+//        try (ResultSet rs = ps.executeQuery()) {
+//            if (rs.next()) {
+//               
+//                
+//               course1.setCourseCode(rs.getString("course_code"));
+//               course1.setCourseTitle(rs.getString("c_title"));
+//               //course1.setFaculty(rs.getString("faculty"));
+//               course1.setPrerequisite(rs.getString("prerequisites"));
+//               course1.setMaxCapacity(rs.getString("max_capacity"));
+//
+//               
+//                return true;
+//            } else {
+//                System.out.println("DEBUG: No row returned from Courses!");
+//            }
+//        }
+//
+//    } catch (SQLException e) {
+//        System.out.println("DEBUG: SQL Exception -> " + e.getMessage());
+//        e.printStackTrace();
+//    }
+//
+//    return false;
+//}
     
 }
