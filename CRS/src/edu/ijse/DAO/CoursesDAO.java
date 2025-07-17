@@ -62,7 +62,7 @@ public class CoursesDAO {
            while (rs.next()) {
                
                Courses course1 = new Courses();
-               course1.setCourseCode(rs.getString("Programme"));
+               course1.setProgramme(rs.getString("Programme"));
                course1.setCourseCode(rs.getString("course_code"));
                course1.setCourseTitle(rs.getString("c_title"));
                //course1.setFaculty(rs.getString("faculty"));
