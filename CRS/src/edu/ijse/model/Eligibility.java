@@ -22,6 +22,8 @@ public class Eligibility {
         this.status = status;
     }
 
+   
+
     public String getStudentId() {
         return studentId;
     }

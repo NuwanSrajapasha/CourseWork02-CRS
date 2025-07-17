@@ -107,6 +107,41 @@ public class EligibilityDAO {
            while(rs.next()){
                
              Eligibility e = new Eligibility();
+             e.setStudentId(rs.getString("student_id"));
+             e.setFacultyId(rs.getString("faculty_id"));
+             e.setProgram(rs.getString("program"));
+             e.setCourseCode(rs.getString("course_code"));
+             e.setCourseTitle(rs.getString("course_title"));
+             e.setStatus(rs.getString("status"));
+             
+             eligibilityList.add(e);
+         }
+         }
+
+    } catch (SQLException e) {
+        System.out.println("DEBUG: SQL Exception -> " + e.getMessage());
+        System.out.println("DEBUG: Found rows = " + eligibilityList.size());
+
+        e.printStackTrace();
+    }
+     return eligibilityList;
+}
+     //for faculty side    
+     public List<Eligibility> getEligibilityByFId(String facultyId) {
+          List<Eligibility> eligibilityList = new ArrayList<>();
+          String sql = "SELECT * FROM eligibility WHERE student_id = ?";
+
+    try (Connection con = DbConnection.getConnection()) {
+        
+         PreparedStatement ps = con.prepareStatement(sql);
+         ps.setString(1, facultyId.trim());
+       
+         try(
+         ResultSet rs = ps.executeQuery()){
+           while(rs.next()){
+               
+             Eligibility e = new Eligibility();
+             e.setStudentId(rs.getString("student_id"));
              e.setFacultyId(rs.getString("faculty_id"));
              e.setProgram(rs.getString("program"));
              e.setCourseCode(rs.getString("course_code"));

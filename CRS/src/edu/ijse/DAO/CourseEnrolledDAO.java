@@ -38,7 +38,7 @@ public class CourseEnrolledDAO {
 
 }
     
-    
+    //get data by student id
     public List<EnrollDetails> getEnrollById(String studentId) {
           List<EnrollDetails> enList = new ArrayList<>();
           String sql = "SELECT * FROM courseenroll WHERE student_id = ?";
@@ -58,6 +58,40 @@ public class CourseEnrolledDAO {
              e.setCourseCode(rs.getString("c_code"));
              e.setCourseTitle(rs.getString("c_title"));
              e.setFacultyId(rs.getString("faculty_id"));
+            
+             
+             enList.add(e);
+         }
+         }
+
+    } catch (SQLException e) {
+        System.out.println("DEBUG: SQL Exception -> " + e.getMessage());
+        System.out.println("DEBUG: Found rows = " + enList.size());
+
+        e.printStackTrace();
+    }
+     return enList;
+}
+    //get data by faculty id
+     public List<EnrollDetails> getEnrollByFId(String facultyId) {
+          List<EnrollDetails> enList = new ArrayList<>();
+          String sql = "SELECT * FROM courseenroll WHERE faculty_id = ?";
+
+    try (Connection con = DbConnection.getConnection()) {
+        
+         PreparedStatement ps = con.prepareStatement(sql);
+         ps.setString(1, facultyId.trim());
+       
+         try(
+         ResultSet rs = ps.executeQuery()){
+           while(rs.next()){
+               
+             EnrollDetails e = new EnrollDetails();
+             e.setStudentId(rs.getString("student_id"));
+             e.setProgram(rs.getString("program"));
+             e.setCourseCode(rs.getString("c_code"));
+             e.setCourseTitle(rs.getString("c_title"));
+             
             
              
              enList.add(e);

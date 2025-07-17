@@ -150,7 +150,7 @@ public class StudentDashboard extends javax.swing.JFrame {
              ex.printStackTrace();
          }
      }
-      //cpourse enroll details
+      //course enroll details
       private void loadEnroll(){
           
           try{
@@ -735,7 +735,7 @@ public class StudentDashboard extends javax.swing.JFrame {
             ". Please complete the prerequisite first.",
             "Eligibility Error", JOptionPane.ERROR_MESSAGE);
     }
-        
+        loadEnroll();
         
         
     }//GEN-LAST:event_jButton2ActionPerformed
