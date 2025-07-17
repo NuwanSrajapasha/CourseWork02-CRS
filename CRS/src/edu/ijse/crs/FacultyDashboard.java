@@ -799,6 +799,11 @@ public class FacultyDashboard extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Rockwell Condensed", 1, 18)); // NOI18N
         jButton1.setText("Update");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel22.setFont(new java.awt.Font("Rockwell Condensed", 0, 16)); // NOI18N
         jLabel22.setText("Program");
@@ -1059,6 +1064,55 @@ public class FacultyDashboard extends javax.swing.JFrame {
         status.setText(Stat);
        
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+         
+        DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
+        if (jTable1.getSelectedColumnCount() == 1) {
+           
+            String Progr = pg1.getText();
+            String St = status.getText();
+           
+          //update button
+            try {
+                Connection con = DbConnection.getConnection();
+                int row = jTable1.getSelectedRow();
+                String value = (jTable1.getModel().getValueAt(row, 0).toString()); //original id
+
+               
+                dtm.setValueAt(Progr, jTable1.getSelectedRow(), 0);
+                dtm.setValueAt(St, jTable1.getSelectedRow(), 1);
+               
+
+                String q = "UPDATE add_drop_period SET program=?,status=?  WHERE faculty_id=?";
+                PreparedStatement pt = con.prepareStatement(q);
+                
+                pt.setString(1, pg1.getText());
+                pt.setString(2, status.getText());
+               
+                pt.setString(3, value);
+                pt.executeUpdate();
+
+                JOptionPane.showMessageDialog(this, "Updated success");
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        else{
+
+            if(jTable1.getRowCount()==0){
+                JOptionPane.showMessageDialog(this,"Table is Empty..");
+            }
+            else{
+                JOptionPane.showMessageDialog(this,"Please select Single Row For Update..");
+            }
+
+        }  
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
