@@ -1,10 +1,14 @@
 
 package edu.ijse.crs;
 
+import edu.ijse.DAO.CourseEnrolledDAO;
 import edu.ijse.DAO.CoursesDAO;
+import edu.ijse.DAO.EligibilityDAO;
 import edu.ijse.DAO.FacultyDetailsDAO;
 import edu.ijse.DAO.StudentDetailsDAO;
 import edu.ijse.model.Courses;
+import edu.ijse.model.Eligibility;
+import edu.ijse.model.EnrollDetails;
 import edu.ijse.model.StudentDetails;
 import edu.ijse.model.User;
 import java.awt.Component;
@@ -20,6 +24,8 @@ public class StudentDashboard extends javax.swing.JFrame {
     private User loggedInUser;
     private String facultyName;
     private String facultyId;
+    private String studentId;
+    private String stid;
    
     public StudentDashboard() {
         initComponents();
@@ -33,6 +39,8 @@ public class StudentDashboard extends javax.swing.JFrame {
         System.out.println("DEBUG: Logged in user ID = '" + loggedInUser.getUserId() + "'");
         loadUserData();
         loadCourses();
+        loadEligible();
+        loadEnroll();
         
         
         //passing facultyId
@@ -45,6 +53,8 @@ public class StudentDashboard extends javax.swing.JFrame {
          
          sfid.setText(facultyId);
          sfid.setEnabled(false);
+         
+         
          
      }
      
@@ -64,15 +74,15 @@ public class StudentDashboard extends javax.swing.JFrame {
                    loadUserData();
                }else if (selectedPanel == estatus){
                    System.out.println("Eligibility Status Panel selected");
-                   //loadFacultyData();
+                   loadEligible();
                   
                }else if (selectedPanel == crtab){
                    System.out.println("Course Registration Panel selected");
                    loadCourses();
                   
                }else if (selectedPanel == ectab){
-                   System.out.println("Faculty Panel selected");
-                   //loadFacultyData();
+                   System.out.println("Enroll Courses Panel selected");
+                   loadEnroll();
                   
                }
                
@@ -110,6 +120,66 @@ public class StudentDashboard extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "No student details found!");
     }
       }
+      
+      private void loadEligible(){
+          
+          try{
+            
+          String stId = loggedInUser.getUserId();
+          
+          EligibilityDAO edo = new EligibilityDAO();
+          List<Eligibility> eligibilityList =edo.getEligibilityById(stId);
+          
+            DefaultTableModel dtm = (DefaultTableModel) eligit.getModel();
+            dtm.setRowCount(0);
+            
+            for(Eligibility eligible:eligibilityList){
+                Vector <Object> v = new Vector<>();
+                v.add(eligible.getFacultyId());
+                v.add(eligible.getProgram());
+                v.add(eligible.getCourseCode());
+                v.add(eligible.getCourseTitle());
+                v.add(eligible.getStatus());
+                
+                dtm.addRow(v);
+            }
+            
+             
+          
+          } catch(Exception ex){
+             ex.printStackTrace();
+         }
+     }
+      //cpourse enroll details
+      private void loadEnroll(){
+          
+          try{
+            
+          String stId = loggedInUser.getUserId();
+          
+          CourseEnrolledDAO edo = new  CourseEnrolledDAO();
+          List<EnrollDetails> enList =edo.getEnrollById(stId);
+          
+            DefaultTableModel dtm = (DefaultTableModel) etable.getModel();
+            dtm.setRowCount(0);
+            
+            for(EnrollDetails eligible:enList){
+                Vector <Object> v = new Vector<>();
+                v.add(eligible.getFacultyId());
+                v.add(eligible.getProgram());
+                v.add(eligible.getCourseCode());
+                v.add(eligible.getCourseTitle());
+                
+                
+                dtm.addRow(v);
+            }
+            
+             
+          
+          } catch(Exception ex){
+             ex.printStackTrace();
+         }
+     }
      
      //load courses to a jTable
       private void loadCourses(){
@@ -163,6 +233,8 @@ public class StudentDashboard extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         fname = new javax.swing.JLabel();
         estatus = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        eligit = new javax.swing.JTable();
         crtab = new javax.swing.JPanel();
         ctable = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -171,13 +243,15 @@ public class StudentDashboard extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         sid = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        ccd = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        ct = new javax.swing.JTextField();
+        cct = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         sfid = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         ectab = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        etable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -342,15 +416,42 @@ public class StudentDashboard extends javax.swing.JFrame {
 
         estatus.setBackground(new java.awt.Color(255, 255, 255));
 
+        eligit.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Faculty Id", "Program", "Course Code", "Course Title", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(eligit);
+
         javax.swing.GroupLayout estatusLayout = new javax.swing.GroupLayout(estatus);
         estatus.setLayout(estatusLayout);
         estatusLayout.setHorizontalGroup(
             estatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1300, Short.MAX_VALUE)
+            .addGroup(estatusLayout.createSequentialGroup()
+                .addGap(136, 136, 136)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1020, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(144, Short.MAX_VALUE))
         );
         estatusLayout.setVerticalGroup(
             estatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 819, Short.MAX_VALUE)
+            .addGroup(estatusLayout.createSequentialGroup()
+                .addGap(98, 98, 98)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(279, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Eligibility Status", estatus);
@@ -376,6 +477,11 @@ public class StudentDashboard extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         ctable.setViewportView(jTable1);
 
         test.setFont(new java.awt.Font("Rockwell Condensed", 1, 24)); // NOI18N
@@ -390,12 +496,12 @@ public class StudentDashboard extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Rockwell Condensed", 1, 16)); // NOI18N
         jLabel12.setText("Course Code");
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        ccd.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel13.setFont(new java.awt.Font("Rockwell Condensed", 1, 16)); // NOI18N
         jLabel13.setText("Course Title");
 
-        ct.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        cct.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel14.setFont(new java.awt.Font("Rockwell Condensed", 1, 16)); // NOI18N
         jLabel14.setText("Faculty Id");
@@ -404,6 +510,11 @@ public class StudentDashboard extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Rockwell Condensed", 1, 16)); // NOI18N
         jButton2.setText("Register For a Course");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout crtabLayout = new javax.swing.GroupLayout(crtab);
         crtab.setLayout(crtabLayout);
@@ -429,8 +540,8 @@ public class StudentDashboard extends javax.swing.JFrame {
                 .addGroup(crtabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(crtabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(sid)
-                        .addComponent(jTextField1)
-                        .addComponent(ct)
+                        .addComponent(ccd)
+                        .addComponent(cct)
                         .addComponent(sfid, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
@@ -456,11 +567,11 @@ public class StudentDashboard extends javax.swing.JFrame {
                         .addGap(31, 31, 31)
                         .addGroup(crtabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ccd, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(40, 40, 40)
                         .addGroup(crtabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel13)
-                            .addComponent(ct, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cct, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(35, 35, 35)
                         .addGroup(crtabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -474,15 +585,42 @@ public class StudentDashboard extends javax.swing.JFrame {
 
         ectab.setBackground(new java.awt.Color(255, 255, 255));
 
+        etable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Program", "Course Code", "Course Title", "Faculty Id"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(etable);
+
         javax.swing.GroupLayout ectabLayout = new javax.swing.GroupLayout(ectab);
         ectab.setLayout(ectabLayout);
         ectabLayout.setHorizontalGroup(
             ectabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ectabLayout.createSequentialGroup()
+                .addContainerGap(181, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 990, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(129, 129, 129))
         );
         ectabLayout.setVerticalGroup(
             ectabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 819, Short.MAX_VALUE)
+            .addGroup(ectabLayout.createSequentialGroup()
+                .addGap(80, 80, 80)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(174, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Enrolled Courses", ectab);
@@ -514,6 +652,52 @@ public class StudentDashboard extends javax.swing.JFrame {
         UserLogin login = new UserLogin();
         login.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+  
+    //course registration
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        
+        String studentId=loggedInUser.getUserId();
+        String selectedCourseCode = ccd.getText();
+        
+        if (selectedCourseCode.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please select a course first!");
+        return;
+    }
+       
+    // ✅ Check eligibility
+    EligibilityDAO eligibilityDAO = new EligibilityDAO();
+    boolean canEnroll = eligibilityDAO.canStudentEnroll(studentId, selectedCourseCode);
+
+    if (canEnroll) {
+        // ✅ If eligible → enroll
+        CourseEnrolledDAO enrolledDAO = new CourseEnrolledDAO();
+        enrolledDAO.enrollStudentInCourse(studentId, selectedCourseCode);
+
+        JOptionPane.showMessageDialog(this,
+            "✅ You have been enrolled in " + selectedCourseCode);
+    } else {
+        // ❌ Not eligible
+        JOptionPane.showMessageDialog(this,
+            "❌ You cannot register for " + selectedCourseCode +
+            ". Please complete the prerequisite first.",
+            "Eligibility Error", JOptionPane.ERROR_MESSAGE);
+    }
+        
+        
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    //mouse clicked for course details
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        
+        String selectedCourseCode = model.getValueAt(jTable1.getSelectedRow(), 0).toString();
+        String title = model.getValueAt(jTable1.getSelectedRow(), 1).toString();
+        ccd.setText(selectedCourseCode);
+        cct.setText(title);
+    }//GEN-LAST:event_jTable1MouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -549,13 +733,16 @@ public class StudentDashboard extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel ay;
+    private javax.swing.JTextField ccd;
+    private javax.swing.JTextField cct;
     private javax.swing.JLabel con;
     private javax.swing.JPanel crtab;
-    private javax.swing.JTextField ct;
     private javax.swing.JScrollPane ctable;
     private javax.swing.JLabel dob;
     private javax.swing.JPanel ectab;
+    private javax.swing.JTable eligit;
     private javax.swing.JPanel estatus;
+    private javax.swing.JTable etable;
     private javax.swing.JLabel fname;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -574,9 +761,10 @@ public class StudentDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField ppv;
     private javax.swing.JLabel prg;
     private javax.swing.JTextField sfid;
