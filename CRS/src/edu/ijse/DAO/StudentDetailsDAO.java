@@ -122,6 +122,27 @@ public class StudentDetailsDAO {
           
                       
           }
-
+ 
+     
+     //passinng faculty id using student details faculty name
+     public String getFacultyNameByStudentId(String studentId) {
+        String facultyName = null;
+        String sql = "SELECT faculty_name FROM studentdetails WHERE user_id = ?";
+        
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            
+            pst.setString(1, studentId);
+            ResultSet rs = pst.executeQuery();
+            
+            if (rs.next()) {
+                facultyName = rs.getString("faculty_name");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return facultyName;
+    }
     
 }

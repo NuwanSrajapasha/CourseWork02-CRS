@@ -86,4 +86,23 @@ public class FacultyDetailsDAO {
     return false;
 }
     
+   public String getFacultyIdByName(String facultyName) {
+        String facultyId = null;
+        String sql = "SELECT user_id FROM facultydetails WHERE name = ?";
+        
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            
+            pst.setString(1, facultyName);
+            ResultSet rs = pst.executeQuery();
+            
+            if (rs.next()) {
+                facultyId = rs.getString("user_id");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return facultyId;
+    }
 }
