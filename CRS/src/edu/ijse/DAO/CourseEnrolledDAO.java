@@ -72,4 +72,30 @@ public class CourseEnrolledDAO {
     }
      return enList;
 }
+    
+      public boolean DropCourse(String courseCode){
+         String sql = "DELETE FROM courseenroll WHERE c_code=?";
+         
+          try (
+                  Connection con = DbConnection.getConnection();
+                  PreparedStatement ps = con.prepareStatement(sql);
+                 
+                  ) 
+          {
+              ps.setString(1,courseCode);
+            
+              int rows1 = ps.executeUpdate();
+              
+              
+             return rows1 > 0;
+             
+          }catch (SQLException e) {
+           e.printStackTrace();
+           return false;
+          
+        }
+        
+          
+                      
+          }
 }
