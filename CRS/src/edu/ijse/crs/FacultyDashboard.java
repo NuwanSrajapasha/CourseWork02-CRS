@@ -1,12 +1,14 @@
 
 package edu.ijse.crs;
 
+import edu.ijse.DAO.AddDropDAO;
 import edu.ijse.DAO.CourseEnrolledDAO;
 import edu.ijse.DAO.CoursesDAO;
 import edu.ijse.DAO.EligibilityDAO;
 import edu.ijse.DAO.FacultyDetailsDAO;
 import edu.ijse.DAO.FacultyProgramDAO;
 import edu.ijse.db.DbConnection;
+import edu.ijse.model.AddDrop;
 import edu.ijse.model.Courses;
 import edu.ijse.model.Eligibility;
 import edu.ijse.model.EnrollDetails;
@@ -17,6 +19,7 @@ import java.awt.Component;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
@@ -40,6 +43,7 @@ public class FacultyDashboard extends javax.swing.JFrame {
         loadComboBoxData();
         loadEligible();
         loadEnroll();
+        stat();
         
        // Prepare a faculty object with just userId
          FacultyDetails faculty = new FacultyDetails();
@@ -63,7 +67,8 @@ public class FacultyDashboard extends javax.swing.JFrame {
         fname.setText(faculty.getName());
         fname.setEnabled(false);
         
-      
+        fcsid.setText(faculty.getUserId());
+        fcsid.setEnabled(false);
     } else {
         JOptionPane.showMessageDialog(this, "No Faculty details found!");
     }
@@ -119,6 +124,10 @@ public class FacultyDashboard extends javax.swing.JFrame {
                    System.out.println("Eligibility Panel selected");
                    loadEligible();
                   
+               }else if (selectedPanel == add){
+                   System.out.println("Add/Drop Panel selected");
+                   stat();
+                  
                }
                
                
@@ -127,6 +136,32 @@ public class FacultyDashboard extends javax.swing.JFrame {
         loadCourses();
       }
        
+      //load eligibility table
+      private void stat(){
+            try {
+            Connection con = DbConnection.getConnection();
+            PreparedStatement pst = con.prepareStatement("Select program,status FROM add_drop_period");
+            ResultSet rs = pst.executeQuery();
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int n = rsmd.getColumnCount();
+            DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
+            dtm.setRowCount(0);
+            while (rs.next()) {
+                Vector v = new Vector();
+                for (int i = 1; i < n; i++) {
+                    v.add(rs.getString("program"));
+                    v.add(rs.getString("status"));
+                    
+                    
+
+                }
+                dtm.addRow(v);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+      }
      //load programme data to combobox
       private void loadComboBoxData() {
         try {
@@ -289,13 +324,22 @@ public class FacultyDashboard extends javax.swing.JFrame {
         pg = new javax.swing.JTextField();
         stid = new javax.swing.JTextField();
         fcid = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
+        add = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         status = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
+        pg1 = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        fcsid = new javax.swing.JTextField();
+        jLabel24 = new javax.swing.JLabel();
+        pcgm = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        sst = new javax.swing.JTextField();
+        jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -719,7 +763,7 @@ public class FacultyDashboard extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Eligibility Management", emtab);
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        add.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel12.setFont(new java.awt.Font("Rockwell Condensed", 1, 25)); // NOI18N
         jLabel12.setText("Update Status to Active or Inactive to Enbale Add /Drop period or Disable it");
@@ -743,6 +787,11 @@ public class FacultyDashboard extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTable1);
 
         jLabel13.setFont(new java.awt.Font("Rockwell Condensed", 0, 18)); // NOI18N
@@ -751,46 +800,107 @@ public class FacultyDashboard extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Rockwell Condensed", 1, 18)); // NOI18N
         jButton1.setText("Update");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(240, 240, 240)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 794, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(223, 223, 223)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 819, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(500, 500, 500)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(248, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        jLabel22.setFont(new java.awt.Font("Rockwell Condensed", 0, 16)); // NOI18N
+        jLabel22.setText("Program");
+
+        jLabel23.setText("Faculty ID :");
+
+        jLabel24.setText("Program :");
+
+        jLabel25.setText("Status :");
+
+        jButton6.setText("Submit");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout addLayout = new javax.swing.GroupLayout(add);
+        add.setLayout(addLayout);
+        addLayout.setHorizontalGroup(
+            addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(addLayout.createSequentialGroup()
+                .addGap(240, 240, 240)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 794, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(256, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel22))
+                .addGap(34, 34, 34)
+                .addGroup(addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(status, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                    .addComponent(pg1))
+                .addGap(510, 510, 510))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(592, 592, 592))
+                .addGap(569, 569, 569))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addLayout.createSequentialGroup()
+                .addGroup(addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(addLayout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addGroup(addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(addLayout.createSequentialGroup()
+                                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(fcsid, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(addLayout.createSequentialGroup()
+                                .addComponent(jLabel24)
+                                .addGap(18, 18, 18)
+                                .addComponent(pcgm))
+                            .addGroup(addLayout.createSequentialGroup()
+                                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(sst)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton6)
+                        .addGap(147, 147, 147)))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 819, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(88, 88, 88))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        addLayout.setVerticalGroup(
+            addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(addLayout.createSequentialGroup()
                 .addGap(79, 79, 79)
                 .addComponent(jLabel12)
-                .addGap(70, 70, 70)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(addLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(addLayout.createSequentialGroup()
+                        .addGap(107, 107, 107)
+                        .addGroup(addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel23)
+                            .addComponent(fcsid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addGroup(addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel24)
+                            .addComponent(pcgm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(32, 32, 32)
+                        .addGroup(addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel25)
+                            .addComponent(sst, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(36, 36, 36)
+                        .addComponent(jButton6)))
+                .addGap(98, 98, 98)
+                .addGroup(addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel22)
+                    .addComponent(pg1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(addLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(202, Short.MAX_VALUE))
+                .addContainerGap(117, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Add/Drop", jPanel2);
+        jTabbedPane1.addTab("Add/Drop", add);
 
         jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 840));
 
@@ -916,6 +1026,39 @@ public class FacultyDashboard extends javax.swing.JFrame {
         loadEnroll();
         
     }//GEN-LAST:event_jButton5ActionPerformed
+   //add drop submit
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        String FacId =fcsid.getText();
+        String Pro = pcgm.getText();
+        String Stat =sst.getText();
+        
+        AddDrop ad = new AddDrop(FacId,Pro,Stat);
+        AddDropDAO adDAO = new AddDropDAO();
+        boolean success = adDAO.registerCourses(ad);
+        if(success){
+             JOptionPane.showMessageDialog(null, "Registration Success");
+            
+             pcgm.setText("");
+             sst.setText("");
+        }
+        
+        stat();
+        
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        
+        String Pro = model.getValueAt(jTable1.getSelectedRow(), 0).toString();
+        String Stat = model.getValueAt(jTable1.getSelectedRow(), 1).toString();
+        
+      
+        pg1.setText(Pro);
+        status.setText(Stat);
+       
+    }//GEN-LAST:event_jTable1MouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -950,6 +1093,7 @@ public class FacultyDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel add;
     private javax.swing.JTextField cc;
     private javax.swing.JTextField ccode;
     private javax.swing.JPanel cmtab;
@@ -960,6 +1104,7 @@ public class FacultyDashboard extends javax.swing.JFrame {
     private javax.swing.JTextField ctitle;
     private javax.swing.JPanel emtab;
     private javax.swing.JTextField fcid;
+    private javax.swing.JTextField fcsid;
     private javax.swing.JTextField ffid;
     private javax.swing.JTextField fid;
     private javax.swing.JTextField fname;
@@ -968,6 +1113,7 @@ public class FacultyDashboard extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -982,6 +1128,10 @@ public class FacultyDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -990,7 +1140,6 @@ public class FacultyDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -999,11 +1148,14 @@ public class FacultyDashboard extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField mxc;
     private javax.swing.JComboBox<String> pcb;
+    private javax.swing.JTextField pcgm;
     private javax.swing.JTextField pg;
+    private javax.swing.JTextField pg1;
     private javax.swing.JTextField pid;
     private javax.swing.JPanel pmtab;
     private javax.swing.JTextField pn;
     private javax.swing.JTable ptable;
+    private javax.swing.JTextField sst;
     private javax.swing.JTextField status;
     private javax.swing.JTextField stid;
     private javax.swing.JTextField stt;
