@@ -16,7 +16,7 @@ public class CoursesDAO {
     
      public boolean registerCourses(Courses course){
         
-        String sql = "INSERT INTO courses (course_code,c_title,faculty,prerequisites,max_capacity,faculty_id) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO courses (Programme,course_code,c_title,faculty,prerequisites,max_capacity,faculty_id) VALUES (?,?,?,?,?,?,?)";
         
         
         try (
@@ -26,12 +26,13 @@ public class CoursesDAO {
             ) 
         {
             //FacultyDetails table
-            ps.setString(1, course.getCourseCode());
-            ps.setString(2, course.getCourseTitle());
-            ps.setString(3, course.getFaculty());
-            ps.setString(4, course.getPrerequisite());
-            ps.setString(5, course.getMaxCapacity());
-            ps.setString(6, course.getFacultyId());
+            ps.setString(1, course.getProgramme());
+            ps.setString(2, course.getCourseCode());
+            ps.setString(3, course.getCourseTitle());
+            ps.setString(4, course.getFaculty());
+            ps.setString(5, course.getPrerequisite());
+            ps.setString(6, course.getMaxCapacity());
+            ps.setString(7, course.getFacultyId());
   
             
             int rows1 = ps.executeUpdate();
@@ -61,6 +62,7 @@ public class CoursesDAO {
            while (rs.next()) {
                
                Courses course1 = new Courses();
+               course1.setCourseCode(rs.getString("Programme"));
                course1.setCourseCode(rs.getString("course_code"));
                course1.setCourseTitle(rs.getString("c_title"));
                //course1.setFaculty(rs.getString("faculty"));
@@ -80,7 +82,7 @@ public class CoursesDAO {
     return courseList;
 }
      
-      //Get courses by faculty id
+      //Get courses by faculty name
      public List<Courses> getCoursesByName(String facultyname) {
          List<Courses> courseList = new ArrayList<>();
          String sql = "SELECT * FROM courses WHERE faculty= ?";
@@ -96,6 +98,7 @@ public class CoursesDAO {
            while (rs.next()) {
                
                Courses course1 = new Courses();
+               course1.setCourseCode(rs.getString("Programme"));
                course1.setCourseCode(rs.getString("course_code"));
                course1.setCourseTitle(rs.getString("c_title"));
                //course1.setFaculty(rs.getString("faculty"));

@@ -10,17 +10,27 @@ public class Courses {
      private String prerequisite;
      private String maxCapacity;
      private String facultyId;
+     private String programme;
      
      public Courses() {}
 
-    public Courses( String courseCode, String courseTitle, String faculty, String prerequisite, String maxCapacity, String facultyId) {
-       
+    public Courses( String programme,String courseCode, String courseTitle, String faculty, String prerequisite, String maxCapacity, String facultyId) {
+        
+        this.programme = programme;
         this.courseCode = courseCode;
         this.courseTitle = courseTitle;
         this.faculty = faculty;
         this.prerequisite = prerequisite;
         this.maxCapacity = maxCapacity;
         this.facultyId = facultyId;
+    }
+
+    public String getProgramme() {
+        return programme;
+    }
+
+    public void setProgramme(String programme) {
+        this.programme = programme;
     }
 
     
