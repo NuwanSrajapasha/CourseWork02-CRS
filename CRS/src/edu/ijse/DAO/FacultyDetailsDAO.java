@@ -105,4 +105,28 @@ public class FacultyDetailsDAO {
         
         return facultyId;
     }
+   
+    public boolean DeleteFaculty(String userId){
+         String sql = "DELETE FROM facultydetails WHERE user_id=?";
+         String sql1 = "DELETE FROM users WHERE user_id=?";
+          try (
+                  Connection con = DbConnection.getConnection();
+                  PreparedStatement ps = con.prepareStatement(sql);
+                  PreparedStatement ps1 = con.prepareStatement(sql1)
+                  ) 
+          {
+              ps.setString(1,userId);
+              ps1.setString(1, userId);
+              
+              int rows1 = ps.executeUpdate();
+              int rows2  = ps1.executeUpdate();
+              
+             return (rows1 > 0 && rows2 > 0);
+             
+          }catch (SQLException e) {
+           e.printStackTrace();
+           return false;
+          
+        }
+}
 }

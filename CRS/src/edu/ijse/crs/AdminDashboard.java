@@ -898,7 +898,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         String Student_id = model.getValueAt(stable.getSelectedRow(), 0).toString();
         String Name = model.getValueAt(stable.getSelectedRow(), 1).toString();
         String DOB  = model.getValueAt(stable.getSelectedRow(), 2).toString();
-        String Contact = model.getValueAt(stable.getSelectedRow(), 5).toString();
+        String Contact = model.getValueAt(stable.getSelectedRow(), 6).toString();
         
         
         stid.setText(Student_id);
@@ -911,7 +911,52 @@ public class AdminDashboard extends javax.swing.JFrame {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         
+           DefaultTableModel dtm = (DefaultTableModel) ftable.getModel();
+           if (ftable.getSelectedColumnCount() == 1) {
+            
+            String FacId =  fcid.getText();
+            String name = fname.getText();
+            String email = femail.getText();
+            String contact = fcontact.getText();
+          //update button
+            try {
+                Connection con = DbConnection.getConnection();
+                int row = ftable.getSelectedRow();
+                String value = (ftable.getModel().getValueAt(row, 0).toString()); //original id
+
+               
+                dtm.setValueAt(name, ftable.getSelectedRow(), 1);
+                dtm.setValueAt(email, ftable.getSelectedRow(), 2);
+                dtm.setValueAt(contact, ftable.getSelectedRow(), 3);
+
+                String q = "UPDATE facultydetails SET name=?,contact=?, email=?  WHERE user_id=?";
+                PreparedStatement pt = con.prepareStatement(q);
+                
+                pt.setString(1, fname.getText());
+                pt.setString(2, femail.getText());
+                pt.setString(3, fcontact.getText());
+                pt.setString(4, value);
+                pt.executeUpdate();
+
+                JOptionPane.showMessageDialog(this, "Updated success");
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
         
+        else{
+
+            if(stable.getRowCount()==0){
+                JOptionPane.showMessageDialog(this,"Table is Empty..");
+            }
+            else{
+                JOptionPane.showMessageDialog(this,"Please select Single Row For Update..");
+            }
+
+        }  
+        
+        loadFacultyData();
         
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -962,6 +1007,7 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
 
         }  
+        loadUserData();
     }//GEN-LAST:event_jButton3ActionPerformed
     //delete a student
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -989,9 +1035,31 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton4ActionPerformed
-
+    //Delete a faculty
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
+          String FACId = fcid.getText();
+        if (FACId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select a Faculty to delete");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delet this Faculty?", "Cofirm Delete", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            boolean deleted = new FacultyDetailsDAO().DeleteFaculty(FACId);
+
+            if (deleted) {
+                JOptionPane.showMessageDialog(this, "Faculty deleted successfully");
+                
+                stid.setText("");
+                //Refresh table
+                loadUserData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Deletion Failed.Please try again");
+            }
+        }
+        loadFacultyData();
     }//GEN-LAST:event_jButton8ActionPerformed
 
    
